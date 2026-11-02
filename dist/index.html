@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111d">
+  <meta name="description" content="SwitchFlow creates approval-aware AI workflows for any business.">
+  <title>SwitchFlow - Any business. Your workflow.</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to workspace</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <a class="brand" href="#" aria-label="SwitchFlow home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>Switch<span>Flow</span></span>
+      </a>
+
+      <nav class="nav-list">
+        <button class="nav-item is-active" data-view="builder" type="button" aria-label="Flow builder">
+          <span class="nav-icon" aria-hidden="true">⌁</span><span>Flow builder</span>
+        </button>
+        <button class="nav-item" data-view="room" type="button" aria-label="Agent room">
+          <span class="nav-icon" aria-hidden="true">◫</span><span>Agent room</span><b id="roomBadge">0</b>
+        </button>
+        <button class="nav-item" data-view="approvals" type="button" aria-label="Approval inbox">
+          <span class="nav-icon" aria-hidden="true">✓</span><span>Approvals</span><b id="approvalBadge">0</b>
+        </button>
+        <button class="nav-item" data-view="library" type="button" aria-label="Workflow library">
+          <span class="nav-icon" aria-hidden="true">▤</span><span>Workflow library</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-note">
+        <span class="status-dot"></span>
+        <p><strong>Switch connected</strong><br>Shared room ready</p>
+      </div>
+
+      <div class="profile-chip">
+        <span>SA</span>
+        <p><strong>SwitchFlow demo</strong><br><small>Workspace owner</small></p>
+      </div>
+    </aside>
+
+    <main id="main" class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Universal business workflow</p>
+          <h1 id="viewTitle">Build a workflow</h1>
+        </div>
+        <div class="top-actions">
+          <button class="button ghost" id="resetButton" type="button">Reset demo</button>
+          <button class="button primary" id="runTopButton" type="button" disabled>Run workflow</button>
+        </div>
+      </header>
+
+      <section class="view is-visible" id="builderView" aria-labelledby="viewTitle">
+        <div class="builder-layout">
+          <form class="brief-panel" id="workflowForm" autocomplete="off">
+            <div class="panel-heading">
+              <span class="step-label">01 / BUSINESS BRIEF</span>
+              <h2>What should SwitchFlow improve?</h2>
+              <p>Give the agents enough context to design a useful, controlled workflow.</p>
+            </div>
+
+            <label for="businessType">Business type</label>
+            <select id="businessType" name="businessType">
+              <option value="restaurant">Restaurant or café</option>
+              <option value="retail">Small retailer</option>
+              <option value="freelancer">Freelancer or agency</option>
+              <option value="clinic">Clinic or pharmacy</option>
+              <option value="construction">Construction contractor</option>
+              <option value="creator">Creator or influencer</option>
+              <option value="transport">Transport operator</option>
+              <option value="other">Other business</option>
+            </select>
+
+            <label for="businessGoal">Problem or goal</label>
+            <textarea id="businessGoal" name="businessGoal" rows="5" required>Every evening, predict tomorrow's demand, reduce food waste, and prepare an ingredient order for manager approval.</textarea>
+
+            <div class="field-row">
+              <div>
+                <label for="trigger">When should it run?</label>
+                <select id="trigger" name="trigger">
+                  <option>Every day at 6:00 PM</option>
+                  <option>When new data arrives</option>
+                  <option>When a customer contacts us</option>
+                  <option>Manually</option>
+                </select>
+              </div>
+              <div>
+                <label for="approval">Control level</label>
+                <select id="approval" name="approval">
+                  <option value="required">Ask before acting</option>
+                  <option value="recommend">Recommend only</option>
+                  <option value="automatic">Act within limits</option>
+                </select>
+              </div>
+            </div>
+
+            <fieldset>
+              <legend>Available data</legend>
+              <label class="check"><input type="checkbox" name="data" value="Sales history" checked><span>Sales history</span></label>
+              <label class="check"><input type="checkbox" name="data" value="Inventory levels" checked><span>Inventory</span></label>
+              <label class="check"><input type="checkbox" name="data" value="Bookings"><span>Bookings</span></label>
+              <label class="check"><input type="checkbox" name="data" value="Documents"><span>Documents</span></label>
+            </fieldset>
+
+            <button class="button primary wide" type="submit">
+              Generate my workflow <span aria-hidden="true">→</span>
+            </button>
+          </form>
+
+          <section class="flow-stage" aria-live="polite">
+            <div class="stage-empty" id="emptyState">
+              <div class="empty-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+              <p class="eyebrow">WORKFLOW ARCHITECT</p>
+              <h2>Your agent team will appear here.</h2>
+              <p>Describe one real business problem. SwitchFlow will map the agents, handoffs, approval gate, and measurable outcome.</p>
+            </div>
+
+            <div class="generated-flow" id="generatedFlow" hidden>
+              <div class="flow-summary">
+                <div>
+                  <p class="eyebrow" id="flowBusiness">RESTAURANT WORKFLOW</p>
+                  <h2 id="flowName">Tomorrow's demand and ordering</h2>
+                </div>
+                <span class="permission-pill" id="permissionPill">Approval required</span>
+              </div>
+
+              <div class="live-rail" id="liveRail" aria-label="Generated workflow steps"></div>
+
+              <div class="flow-footer">
+                <div>
+                  <span>Trigger</span>
+                  <strong id="triggerSummary">Every day at 6:00 PM</strong>
+                </div>
+                <div>
+                  <span>Success measure</span>
+                  <strong id="successMetric">Less waste and fewer stock-outs</strong>
+                </div>
+                <button class="button primary" id="activateButton" type="button">Activate workflow</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="roomView" aria-labelledby="roomTitle">
+        <div class="room-header">
+          <div>
+            <p class="eyebrow">SHARED SWITCH ROOM</p>
+            <h2 id="roomTitle">Agent collaboration</h2>
+          </div>
+          <div class="run-state"><span id="runDot"></span><strong id="runStateText">Waiting for a workflow</strong></div>
+        </div>
+        <div class="room-layout">
+          <div class="event-stream" id="eventStream">
+            <div class="room-empty">
+              <strong>No workflow is running.</strong>
+              <p>Generate and activate a workflow to watch agent handoffs.</p>
+            </div>
+          </div>
+          <aside class="context-panel">
+            <p class="eyebrow">PRESERVED CONTEXT</p>
+            <dl id="contextList">
+              <div><dt>Business</dt><dd>Not selected</dd></div>
+              <div><dt>Trigger</dt><dd>Not configured</dd></div>
+              <div><dt>Permission</dt><dd>Not configured</dd></div>
+              <div><dt>Data sources</dt><dd>None connected</dd></div>
+            </dl>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="approvalsView" aria-labelledby="approvalsTitle">
+        <div class="room-header">
+          <div><p class="eyebrow">HUMAN CONTROL</p><h2 id="approvalsTitle">Approval inbox</h2></div>
+        </div>
+        <div class="approval-list" id="approvalList">
+          <div class="room-empty"><strong>No decisions waiting.</strong><p>Proposed actions appear here before execution.</p></div>
+        </div>
+      </section>
+
+      <section class="view" id="libraryView" aria-labelledby="libraryTitle">
+        <div class="room-header">
+          <div><p class="eyebrow">REUSABLE OPERATIONS</p><h2 id="libraryTitle">Workflow library</h2></div>
+          <button class="button secondary" id="newWorkflowButton" type="button">+ New workflow</button>
+        </div>
+        <div class="library-grid" id="libraryGrid"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
