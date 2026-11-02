@@ -1,0 +1,115 @@
+# SwitchFlow: a universal business workflow room for Switch.
+version: 1
+
+params:
+  team:
+    type: string
+    label: Workflow name
+    description: Lowercase prefix used for the room and every agent name.
+    default: switchflow
+    pattern: "[a-z][a-z0-9-]*"
+  business_type:
+    type: enum
+    label: Business type
+    description: The kind of business this room will support.
+    enum: [restaurant, retail, freelancer, clinic, construction, creator, transport, other]
+    default: restaurant
+  business_goal:
+    type: string
+    label: Business problem or goal
+    description: Describe the real outcome the team should produce.
+    multiline: true
+    default: Reduce waste, protect availability, and prepare tomorrow's purchasing action.
+  success_metric:
+    type: string
+    label: Success measure
+    default: Reduce avoidable waste without creating stock-outs.
+  approval_phrase:
+    type: string
+    label: Approval phrase
+    default: APPROVE
+    input: advanced
+  provider:
+    type: provider
+    default: [codex, claude, opencode]
+    input: advanced
+  location:
+    type: location
+    default: local
+    input: advanced
+  directory:
+    type: directory
+    default: "{$agents_dir}/{agent}"
+    input: advanced
+  bridge:
+    type: bridge
+    default: [$first]
+
+agents:
+  - name: "{team}-architect"
+    display_name: SwitchFlow Architect
+    description: Turns a business goal into a controlled workflow and coordinates the room.
+    addressing: anyone
+    provider: "{provider}"
+    location: "{location}"
+    directory: "{directory}"
+    instructions: |
+      You are the workflow architect for a {business_type} business.
+      Goal: {business_goal}
+      Success measure: {success_metric}
+      Restate each request, create a numbered plan, and hand it to @{team}-analyst.
+      Keep Goal, Current owner, Waiting on, and Next visible in the room.
+      Do not execute or approve work yourself. Keep every handoff in Switch.
+
+  - name: "{team}-analyst"
+    display_name: SwitchFlow Analyst
+    description: Analyzes evidence, risks, and prepares an approval packet.
+    addressing: owner-agents
+    provider: "{provider}"
+    location: "{location}"
+    directory: "{directory}"
+    instructions: |
+      Review the architect's plan for a {business_type} business. Separate facts,
+      assumptions, estimates, and missing information. Produce an approval packet with
+      Proposed action, Benefit, Cost, Reversible?, Evidence, Limits, and Verification.
+      Ask the person for the exact phrase "{approval_phrase}". An agent cannot approve.
+      After a person's approval, hand the approved packet to @{team}-operator.
+
+  - name: "{team}-operator"
+    display_name: SwitchFlow Operator
+    description: Performs only the action a person explicitly approved.
+    addressing: owner-agents
+    provider: "{provider}"
+    location: "{location}"
+    directory: "{directory}"
+    instructions: |
+      Act only when the Switch room contains "{approval_phrase}" from a person and the
+      analyst's packet names the same action. Otherwise stop. Perform only the approved
+      scope, record exact evidence, then hand it to @{team}-verifier.
+
+  - name: "{team}-verifier"
+    display_name: SwitchFlow Verifier
+    description: Independently checks execution and reports the business outcome.
+    addressing: owner-agents
+    provider: "{provider}"
+    location: "{location}"
+    directory: "{directory}"
+    instructions: |
+      Independently inspect approval and execution evidence. Report VERIFIED, PARTIAL,
+      FAILED, or CANNOT VERIFY. Include evidence, business impact, remaining risk, and
+      next step. Send the result to @{team}-architect. Do not alter operator artifacts.
+
+room:
+  name: "{team}-{business_type}"
+  description: A human-controlled SwitchFlow room for {business_type} business work.
+  bridge: "{bridge}"
+  agents: ["{team}-architect", "{team}-analyst", "{team}-operator", "{team}-verifier"]
+  users: ["{$creator}"]
+
+kickoff: |
+  @{team}-architect, @{team}-analyst, @{team}-operator and @{team}-verifier:
+  this is the SwitchFlow room for a {business_type} business.
+  Goal: {business_goal}
+  Success measure: {success_metric}
+  Human approval phrase: {approval_phrase}
+  Architect, introduce the team, explain the approval gate, and ask for the first request.

@@ -35,7 +35,7 @@
 
       <div class="sidebar-note">
         <span class="status-dot"></span>
-        <p><strong>Switch connected</strong><br>Shared room ready</p>
+        <p><strong>Switch template ready</strong><br>Import in Switch Console</p>
       </div>
 
       <div class="profile-chip">
@@ -52,7 +52,7 @@
         </div>
         <div class="top-actions">
           <button class="button ghost" id="resetButton" type="button">Reset demo</button>
-          <button class="button primary" id="runTopButton" type="button" disabled>Run workflow</button>
+          <button class="button primary" id="runTopButton" type="button" disabled>Run demo</button>
         </div>
       </header>
 
@@ -141,7 +141,10 @@
                   <span>Success measure</span>
                   <strong id="successMetric">Less waste and fewer stock-outs</strong>
                 </div>
-                <button class="button primary" id="activateButton" type="button">Activate workflow</button>
+                <div class="flow-actions">
+                  <a class="button secondary" href="./switchflow.template.yaml" download>Export to Switch</a>
+                  <button class="button primary" id="activateButton" type="button">Run demo</button>
+                </div>
               </div>
             </div>
           </section>

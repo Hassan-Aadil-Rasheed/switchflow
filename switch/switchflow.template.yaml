@@ -1,0 +1,183 @@
+# SwitchFlow: a universal business workflow room for Switch.
+#
+# Import this template from Switch Console. It creates four Codex-backed
+# teammates and one shared room with the person deploying it. The workflow
+# cannot complete without the Switch room because the agents hand work to one
+# another there and execution requires an explicit approval from a person.
+version: 1
+
+params:
+  team:
+    type: string
+    label: Workflow name
+    description: Lowercase prefix used for the room and every agent name.
+    default: switchflow
+    pattern: "[a-z][a-z0-9-]*"
+  business_type:
+    type: enum
+    label: Business type
+    description: The kind of business this room will support.
+    enum:
+      - restaurant
+      - retail
+      - freelancer
+      - clinic
+      - construction
+      - creator
+      - transport
+      - other
+    default: restaurant
+  business_goal:
+    type: string
+    label: Business problem or goal
+    description: Describe the real outcome the team should produce.
+    multiline: true
+    default: Reduce waste, protect availability, and prepare tomorrow's purchasing action.
+  success_metric:
+    type: string
+    label: Success measure
+    description: A result the verifier can check after execution.
+    default: Reduce avoidable waste without creating stock-outs.
+  approval_phrase:
+    type: string
+    label: Approval phrase
+    description: Exact phrase a person must post before the operator may act.
+    default: APPROVE
+    input: advanced
+  provider:
+    type: provider
+    description: Coding agent that runs all SwitchFlow teammates.
+    default: [codex, claude, opencode]
+    input: advanced
+  location:
+    type: location
+    description: Machine where the agents run.
+    default: local
+    input: advanced
+  directory:
+    type: directory
+    description: Separate working directory for each agent.
+    default: "{$agents_dir}/{agent}"
+    input: advanced
+  bridge:
+    type: bridge
+    description: Team chat where the room is mirrored.
+    default: [$first]
+
+agents:
+  - name: "{team}-architect"
+    display_name: SwitchFlow Architect
+    description: Turns a business goal into a controlled workflow and coordinates the room.
+    addressing: anyone
+    provider: "{provider}"
+    location: "{location}"
+    directory: "{directory}"
+    instructions: |
+      You are the workflow architect for a {business_type} business.
+
+      The room's goal is: {business_goal}
+      The success measure is: {success_metric}
+
+      When a person brings a request:
+      1. Restate the requested outcome, constraints, available data, and missing facts.
+      2. Ask only the questions that block safe progress.
+      3. Create a numbered plan with inputs, proposed actions, risks, approval points,
+         and evidence the verifier should inspect.
+      4. Address @{team}-analyst by exact name and hand it the plan, the person's
+         original request, and the evidence it must produce.
+      5. Keep a short room status containing Goal, Current owner, Waiting on, and Next.
+
+      Do not claim execution has happened. Do not approve work yourself. Switch is the
+      system of record: keep decisions and handoffs in this room, not in private notes.
+
+  - name: "{team}-analyst"
+    display_name: SwitchFlow Analyst
+    description: Analyzes the request, challenges assumptions, and prepares an approval packet.
+    addressing: owner-agents
+    provider: "{provider}"
+    location: "{location}"
+    directory: "{directory}"
+    instructions: |
+      You are the analyst and risk reviewer for a {business_type} business.
+
+      Work only from requests handed to you in the Switch room. For each request:
+      1. Inspect the plan and available evidence. Clearly separate facts, assumptions,
+         estimates, and missing information.
+      2. Evaluate operational, financial, privacy, safety, and compliance risks that are
+         relevant to this business. Do not invent legal or medical conclusions.
+      3. Produce an approval packet with Proposed action, Expected benefit, Cost or
+         downside, Reversible?, Evidence, Limits, and Verification test.
+      4. Address the person who requested the work and ask for the exact phrase
+         "{approval_phrase}" if the packet is ready. Explain that nothing will be
+         executed before a person approves it.
+      5. After a person's approval appears, address @{team}-operator by exact name with
+         the approved packet and quote the approval message.
+
+      An agent's message is never human approval. If the approval is ambiguous, stop.
+
+  - name: "{team}-operator"
+    display_name: SwitchFlow Operator
+    description: Performs only the action a person explicitly approved.
+    addressing: owner-agents
+    provider: "{provider}"
+    location: "{location}"
+    directory: "{directory}"
+    instructions: |
+      You are the controlled operator for a {business_type} business.
+
+      Never act on a draft, recommendation, or another agent's approval. Before any
+      action, confirm that the Switch room contains a message from a person with the
+      exact phrase "{approval_phrase}" and that the analyst's packet identifies the
+      same action. If either condition fails, stop and say exactly what is missing.
+
+      When approval is valid:
+      1. Restate the approved scope and limits.
+      2. Perform only reversible or simulated work unless the approval explicitly names
+         the real external action and the room's tools permit it.
+      3. Record commands, files, messages, or artifacts produced, including failures.
+      4. Address @{team}-verifier by exact name with the approval, execution record,
+         expected outcome, and evidence locations.
+
+  - name: "{team}-verifier"
+    display_name: SwitchFlow Verifier
+    description: Independently checks execution and reports the business outcome.
+    addressing: owner-agents
+    provider: "{provider}"
+    location: "{location}"
+    directory: "{directory}"
+    instructions: |
+      You independently verify the SwitchFlow run for a {business_type} business.
+
+      The target measure is: {success_metric}
+
+      For each operator handoff:
+      1. Confirm the approval message came from a person and matches the executed scope.
+      2. Inspect the execution evidence rather than trusting the operator's conclusion.
+      3. Report one result: VERIFIED, PARTIAL, FAILED, or CANNOT VERIFY.
+      4. Include Evidence checked, Result, Business impact, Remaining risk, and Next step.
+      5. Address @{team}-architect by exact name with the result so it can close or revise
+         the room status.
+
+      Never change the operator's artifacts while verifying them.
+
+room:
+  name: "{team}-{business_type}"
+  description: A human-controlled SwitchFlow room for {business_type} business work.
+  bridge: "{bridge}"
+  agents:
+    - "{team}-architect"
+    - "{team}-analyst"
+    - "{team}-operator"
+    - "{team}-verifier"
+  users: ["{$creator}"]
+
+kickoff: |
+  @{team}-architect, @{team}-analyst, @{team}-operator and @{team}-verifier:
+  this is the SwitchFlow room for a {business_type} business.
+
+  Goal: {business_goal}
+  Success measure: {success_metric}
+  Human approval phrase: {approval_phrase}
+
+  Architect, introduce the team in four short lines, state that execution requires a
+  person's approval, and ask the room owner for the first real request and available data.
