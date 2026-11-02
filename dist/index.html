@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#07111d">
   <meta name="description" content="SwitchFlow creates approval-aware AI workflows for any business.">
   <title>SwitchFlow - Any business. Your workflow.</title>
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=4">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to workspace</a>
@@ -31,11 +31,14 @@
         <button class="nav-item" data-view="library" type="button" aria-label="Workflow library">
           <span class="nav-icon" aria-hidden="true">▤</span><span>Workflow library</span>
         </button>
+        <button class="nav-item" data-view="history" type="button" aria-label="Run history">
+          <span class="nav-icon" aria-hidden="true">◷</span><span>Run history</span><b id="historyBadge">0</b>
+        </button>
       </nav>
 
       <div class="sidebar-note">
         <span class="status-dot"></span>
-        <p><strong>Switch template ready</strong><br>Import in Switch Console</p>
+        <p><strong>Powered by Switch</strong><br>Room template ready</p>
       </div>
 
       <div class="profile-chip">
@@ -55,6 +58,16 @@
           <button class="button primary" id="runTopButton" type="button" disabled>Run demo</button>
         </div>
       </header>
+
+      <section class="control-spine" aria-label="Universal workflow lifecycle">
+        <div class="spine-stage is-current" data-phase="understand"><span>01</span><strong>Understand</strong></div>
+        <div class="spine-stage" data-phase="plan"><span>02</span><strong>Plan</strong></div>
+        <div class="spine-stage" data-phase="review"><span>03</span><strong>Review</strong></div>
+        <div class="spine-stage" data-phase="approve"><span>04</span><strong>Approve</strong></div>
+        <div class="spine-stage" data-phase="execute"><span>05</span><strong>Execute</strong></div>
+        <div class="spine-stage" data-phase="verify"><span>06</span><strong>Verify</strong></div>
+        <div class="spine-stage" data-phase="improve"><span>07</span><strong>Improve</strong></div>
+      </section>
 
       <section class="view is-visible" id="builderView" aria-labelledby="viewTitle">
         <div class="builder-layout">
@@ -80,6 +93,9 @@
             <label for="businessGoal">Problem or goal</label>
             <textarea id="businessGoal" name="businessGoal" rows="5" required>Every evening, predict tomorrow's demand, reduce food waste, and prepare an ingredient order for manager approval.</textarea>
 
+            <label for="successMetricInput">How will success be measured?</label>
+            <input id="successMetricInput" name="successMetric" type="text" value="Reduce avoidable waste by 20% without creating stock-outs." required>
+
             <div class="field-row">
               <div>
                 <label for="trigger">When should it run?</label>
@@ -97,6 +113,7 @@
                   <option value="recommend">Recommend only</option>
                   <option value="automatic">Act within limits</option>
                 </select>
+                <small class="control-note" id="controlNote">Agents prepare the action and wait for an authorized decision.</small>
               </div>
             </div>
 
@@ -146,6 +163,10 @@
                   <button class="button primary" id="activateButton" type="button">Run demo</button>
                 </div>
               </div>
+              <div class="switch-proof">
+                <span class="status-dot"></span>
+                <div><strong>Switch is the system of record</strong><small>Agent handoffs, human decisions, execution evidence, and verification stay together in one shared room.</small></div>
+              </div>
             </div>
           </section>
         </div>
@@ -174,6 +195,15 @@
               <div><dt>Permission</dt><dd>Not configured</dd></div>
               <div><dt>Data sources</dt><dd>None connected</dd></div>
             </dl>
+            <div class="evidence-ledger">
+              <p class="eyebrow">RUN EVIDENCE</p>
+              <ul id="evidenceList">
+                <li><span>Request</span><strong>Waiting</strong></li>
+                <li><span>Human decision</span><strong>Waiting</strong></li>
+                <li><span>Execution record</span><strong>Waiting</strong></li>
+                <li><span>Verified outcome</span><strong>Waiting</strong></li>
+              </ul>
+            </div>
           </aside>
         </div>
       </section>
@@ -194,11 +224,25 @@
         </div>
         <div class="library-grid" id="libraryGrid"></div>
       </section>
+
+      <section class="view" id="historyView" aria-labelledby="historyTitle">
+        <div class="room-header">
+          <div><p class="eyebrow">AUDIT TRAIL</p><h2 id="historyTitle">Workflow history</h2></div>
+          <span class="audit-lock">Immutable demo record</span>
+        </div>
+        <div class="history-summary" id="historySummary"></div>
+        <div class="history-table-wrap">
+          <table class="history-table">
+            <thead><tr><th>Run</th><th>Business</th><th>Decision</th><th>Outcome</th><th>Evidence</th><th>Completed</th></tr></thead>
+            <tbody id="historyTableBody"></tbody>
+          </table>
+        </div>
+      </section>
     </main>
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="./app.js"></script>
+  <script src="./app.js?v=4"></script>
 </body>
 </html>
