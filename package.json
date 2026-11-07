@@ -1,0 +1,65 @@
+{
+  "name": "switchflow-desktop",
+  "version": "0.3.36",
+  "private": true,
+  "description": "SwitchFlow local business workflow desktop application",
+  "author": "SwitchFlow",
+  "main": "desktop/main.cjs",
+  "scripts": {
+    "desktop": "electron .",
+    "desktop:build": "electron-builder --win nsis --x64",
+    "desktop:check": "node --check desktop/main.cjs && node --check desktop/preload.cjs"
+  },
+  "build": {
+    "appId": "com.switchflow.desktop",
+    "productName": "SwitchFlow",
+    "compression": "store",
+    "directories": {
+      "output": "desktop-release"
+    },
+    "files": [
+      "desktop/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "desktop/start-switch.ps1",
+        "to": "start-switch.ps1"
+      },
+      {
+        "from": "dist",
+        "to": "dist"
+      },
+      {
+        "from": "switch-agent-bridge",
+        "to": "switch-agent-bridge",
+        "filter": [
+          "src/**/*",
+          "package.json"
+        ]
+      },
+      {
+        "from": "switch-agent-bridge/node_modules/ws",
+        "to": "switch-agent-bridge/node_modules/ws",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  },
+  "devDependencies": {
+    "electron": "^45.2.2",
+    "electron-builder": "^26.18.0"
+  }
+}
+

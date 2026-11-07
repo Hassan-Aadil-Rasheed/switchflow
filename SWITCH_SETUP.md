@@ -1,7 +1,9 @@
 # Run SwitchFlow in Switch
 
 SwitchFlow's website is a companion workflow designer. The real hackathon
-workflow runs inside a Switch room using `switch/switchflow.template.yaml`.
+workflow runs inside a Switch room. On Windows, use the protocol-connected
+backend in `switch-agent-bridge`; the YAML template remains available for a
+POSIX agent host.
 
 ## Prerequisites
 
@@ -12,7 +14,18 @@ workflow runs inside a Switch room using `switch/switchflow.template.yaml`.
 4. Choose **Run a server on this computer**. Switch starts its local server in
    Docker and includes Mattermost for the demo.
 
-## Create the workflow
+## Create the workflow on Windows
+
+1. In `switch-agent-bridge`, run `npm install`, then `npm run setup`. Setup
+   securely reads the local server's existing registration credential in place.
+2. Run `npm start` and keep that terminal open during the demo.
+3. Open the generated Mattermost room.
+
+This route uses four custom agents over Switch's official WebSocket/HTTP agent
+protocol and the Codex CLI already signed in on this machine. It avoids the
+POSIX-host requirement for Console-managed SDK sessions.
+
+## Create the workflow on a POSIX host
 
 1. In Switch Console, open **Templates** and import
    `switch/switchflow.template.yaml`.

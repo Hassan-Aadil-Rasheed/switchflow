@@ -1,0 +1,14 @@
+# Never upload local agent credentials, runtime files, or Sites metadata.
+switch-agent-bridge
+deploy
+desktop
+desktop-release
+node_modules
+switch
+.openai
+.git
+.env
+.env.*
+**/state.json
+**/node_modules
+**/*.log

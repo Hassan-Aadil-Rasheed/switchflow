@@ -1,0 +1,19 @@
+[Unit]
+Description=SwitchFlow agent bridge
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=switchflow
+WorkingDirectory=/opt/switchflow/switch-agent-bridge
+EnvironmentFile=/etc/switchflow/bridge.env
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/node src/index.js
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

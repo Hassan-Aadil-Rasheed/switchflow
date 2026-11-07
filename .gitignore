@@ -1,0 +1,8 @@
+.vercel
+node_modules/
+desktop-release/
+tmp/
+output/
+*.log
+chat-upload-test.csv
+cookie-capacity-test.csv

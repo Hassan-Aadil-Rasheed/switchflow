@@ -1,0 +1,9 @@
+# Replace with the backend hostname whose DNS points to the Linux server.
+backend.example.com {
+    reverse_proxy 127.0.0.1:8787 {
+        # Match the backend's local Host / Origin checks.
+        header_up Host 127.0.0.1:8787
+        header_up Origin http://127.0.0.1:8787
+        flush_interval -1
+    }
+}

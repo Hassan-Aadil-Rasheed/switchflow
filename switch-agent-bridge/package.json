@@ -1,0 +1,19 @@
+{
+  "name": "switchflow-agent-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Four protocol-connected SwitchFlow agents for Switch Rooms on Windows.",
+  "scripts": {
+    "setup": "node --env-file-if-exists=.env src/setup.js",
+    "start": "node --env-file-if-exists=.env src/index.js",
+    "check": "node --check src/index.js && node --check src/setup.js && node --test"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "pdf-parse": "^2.4.5",
+    "ws": "^8.18.3"
+  }
+}

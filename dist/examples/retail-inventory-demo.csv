@@ -1,0 +1,5 @@
+sku,item,weekly_sales,on_hand,reorder_point,lead_time_days,unit_cost_inr
+USB-C-01,USB-C cable,84,17,35,3,180
+NOTE-A5-02,A5 notebook,30,92,25,5,65
+MOUSE-W-03,Wireless mouse,42,11,20,4,490
+LAMP-D-04,Desk lamp,8,38,12,7,730

@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07111d">
+  <meta name="theme-color" content="#fff4d6">
   <meta name="description" content="SwitchFlow creates approval-aware AI workflows for any business.">
   <title>SwitchFlow - Any business. Your workflow.</title>
-  <link rel="stylesheet" href="./styles.css?v=4">
+  <link rel="stylesheet" href="./styles.css?v=19">
 </head>
-<body>
+<body class="is-onboarding">
   <a class="skip-link" href="#main">Skip to workspace</a>
 
   <div class="app-shell">
@@ -19,7 +19,11 @@
       </a>
 
       <nav class="nav-list">
-        <button class="nav-item is-active" data-view="builder" type="button" aria-label="Flow builder">
+        <button class="nav-item is-active onboarding-nav" id="overviewNav" data-view="overview" type="button" aria-label="Business overview"><span class="nav-icon" aria-hidden="true">◉</span><span>Business overview</span></button>
+        <button class="nav-item onboarding-nav" data-view="connections" type="button" aria-label="Connections"><span class="nav-icon">↔</span><span>Connections</span></button>
+        <button class="nav-item" data-view="chats" type="button" aria-label="Chats"><span class="nav-icon">☏</span><span>Chats</span></button>
+        <button class="nav-item onboarding-nav" data-view="data" type="button" aria-label="Business data and schedules"><span class="nav-icon">▤</span><span>Data & schedules</span></button>
+        <button class="nav-item" data-view="builder" type="button" aria-label="Flow builder">
           <span class="nav-icon" aria-hidden="true">⌁</span><span>Flow builder</span>
         </button>
         <button class="nav-item" data-view="room" type="button" aria-label="Agent room">
@@ -34,6 +38,7 @@
         <button class="nav-item" data-view="history" type="button" aria-label="Run history">
           <span class="nav-icon" aria-hidden="true">◷</span><span>Run history</span><b id="historyBadge">0</b>
         </button>
+        <button class="nav-item" data-view="help" type="button" aria-label="Help"><span class="nav-icon" aria-hidden="true">?</span><span>Help</span></button>
       </nav>
 
       <div class="sidebar-note">
@@ -49,31 +54,147 @@
 
     <main id="main" class="workspace">
       <header class="topbar">
+        <div class="onboarding-brand" aria-label="SwitchFlow">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>Switch<span>Flow</span></span>
+        </div>
         <div>
           <p class="eyebrow">Universal business workflow</p>
-          <h1 id="viewTitle">Build a workflow</h1>
+          <h1 id="viewTitle">Business overview</h1>
         </div>
+        <span class="onboarding-status"><span class="status-dot" aria-hidden="true"></span> Workspace setup</span>
         <div class="top-actions">
-          <button class="button ghost" id="resetButton" type="button">Reset demo</button>
-          <button class="button primary" id="runTopButton" type="button" disabled>Run demo</button>
+          <button class="button ghost" id="resetButton" type="button" hidden>Reset demo</button>
+          <button class="button primary" id="runTopButton" type="button" disabled hidden>Run in Switch</button>
         </div>
       </header>
 
-      <section class="control-spine" aria-label="Universal workflow lifecycle">
-        <div class="spine-stage is-current" data-phase="understand"><span>01</span><strong>Understand</strong></div>
-        <div class="spine-stage" data-phase="plan"><span>02</span><strong>Plan</strong></div>
-        <div class="spine-stage" data-phase="review"><span>03</span><strong>Review</strong></div>
-        <div class="spine-stage" data-phase="approve"><span>04</span><strong>Approve</strong></div>
-        <div class="spine-stage" data-phase="execute"><span>05</span><strong>Execute</strong></div>
-        <div class="spine-stage" data-phase="verify"><span>06</span><strong>Verify</strong></div>
-        <div class="spine-stage" data-phase="improve"><span>07</span><strong>Improve</strong></div>
+      <section class="view is-visible overview-view" id="overviewView" aria-labelledby="overviewTitle">
+        <div class="overview-intro">
+          <div>
+            <p class="eyebrow">YOUR BUSINESS, CONNECTED</p>
+            <h2 id="overviewTitle">Set the stage.<br>Flip the switch.</h2>
+            <p>Connect your workspace, add business data, and describe what you want the agents to do. Then turn on your workflow.</p>
+          </div>
+          <nav class="setup-route" aria-label="Setup steps">
+            <p>YOUR SETUP ROUTE</p>
+            <a href="#connectionsView"><span>01</span><strong>Connect</strong><small>Account and messaging apps</small></a>
+            <a href="#dataView"><span>02</span><strong>Add data</strong><small>Files and schedules</small></a>
+            <a href="#workflowForm"><span>03</span><strong>Describe</strong><small>Your business brief</small></a>
+            <a href="#switchAgentPicker"><span>04</span><strong>Choose agents</strong><small>Invite agents from Switch</small></a>
+            <a href="#switchboardTitle"><span>05</span><strong>Switch on</strong><small>See the agent workflow</small></a>
+          </nav>
+        </div>
+
+        <section class="sector-showcase" aria-labelledby="sectorShowcaseTitle">
+          <div class="sector-showcase-heading"><p class="eyebrow">THREE SECTORS · ONE WORKFLOW ENGINE</p><h3 id="sectorShowcaseTitle">Built for different teams.</h3><p>Start with a restaurant, software team, or retail store. Each example has sample data, agent handoffs, and a human approval.</p></div>
+          <div class="library-grid" id="sectorShowcaseGrid"></div>
+        </section>
+
+        <div id="setupBeforeSwitch" class="setup-before-switch" aria-label="Business setup"></div>
+
+        <div class="switchboard-layout">
+          <section class="switchboard-card" aria-labelledby="switchboardTitle">
+            <div class="switchboard-heading">
+              <div><p class="step-label">05 / FINAL STEP</p><h3 id="switchboardTitle">Turn on your workspace</h3></div>
+              <span class="readiness-label" id="workspaceReadiness" role="status">Checking setup…</span>
+            </div>
+
+            <div class="switch-action">
+              <button id="workspaceSwitch" class="workspace-switch" type="button" role="switch" aria-label="Flip the switch" aria-checked="false" aria-describedby="switchHelp"><span class="toggle-switch-background" aria-hidden="true"><span class="toggle-switch-handle"></span></span></button>
+              <div><p class="eyebrow">THE SWITCH</p><h3 id="switchLabel">SwitchFlow is standing by</h3><p id="switchHelp">Finish Connections and Data &amp; schedules first. Then SwitchFlow will prepare your business inputs for a new workflow.</p></div>
+            </div>
+
+          </section>
+
+        </div>
       </section>
 
-      <section class="view is-visible" id="builderView" aria-labelledby="viewTitle">
+      <section class="view" id="chatsView" aria-labelledby="chatsTitle">
+        <div class="chat-dashboard-heading"><div><p class="eyebrow">CUSTOMERS &amp; TEAM</p><h2 id="chatsTitle">One inbox. Clearly separated chats.</h2></div><button class="button ghost" type="button" id="refreshInbox">Refresh chats</button></div>
+        <p>Choose an app, open a chat, and reply from one place.</p>
+        <p><strong id="inboxCount">Loading chats…</strong> <span id="inboxLive"></span></p>
+        <p id="inboxFeedback" role="status" aria-live="polite"></p>
+        <details class="inbox-panel" id="inboxLink">
+          <summary>Link a chat or channel</summary>
+          <form id="inboxLinkForm">
+            <p>Use an existing chat the connected app can access. You can monitor it without creating a workflow.</p>
+            <label for="inboxAccount">Connected account</label>
+            <select id="inboxAccount" required></select>
+            <label for="inboxChannelName">Name in SwitchFlow</label>
+            <input id="inboxChannelName" required maxlength="100" placeholder="Customer orders">
+            <label for="inboxChannelId">Chat or channel ID</label>
+            <input id="inboxChannelId" required maxlength="250">
+            <button class="button primary" id="inboxLinkSubmit" type="submit">Link channel</button>
+            <p id="inboxLinkStatus" role="status"></p>
+          </form>
+        </details>
+        <div class="inbox-layout">
+          <aside class="inbox-panel inbox-channels" aria-label="Connected chats"><div class="inbox-app-rail"><span class="inbox-rail-label">Apps</span><div id="inboxApps"></div></div><div class="inbox-channel-list"><label for="inboxPlatform">Your chats</label><select id="inboxPlatform" class="inbox-platform-select"><option value="all">All apps</option><option value="telegram">Telegram</option><option value="discord">Discord</option><option value="slack">Slack</option><option value="teams">Microsoft Teams</option><option value="mattermost">Mattermost</option></select><div id="inboxRooms"></div></div></aside>
+          <section class="inbox-panel inbox-conversation"><header class="inbox-conversation-head"><div><p class="eyebrow">CONVERSATION</p><h3 id="inboxDestination">Choose a chat</h3><p class="control-note">Replies stay in this chat.</p></div></header><div id="inboxThreads" aria-label="Conversation threads">Choose a chat to see its conversations.</div><div id="inboxMessages" aria-live="polite"></div><form id="inboxReplyForm" hidden><label for="inboxReplyBody" class="inbox-compose-label">Your reply</label><div class="inbox-compose-bar"><textarea id="inboxReplyBody" maxlength="4000" rows="1" required placeholder="Write a message…"></textarea><button class="button primary" type="submit" id="inboxSend" aria-label="Send reply" title="Send reply">Send reply</button></div><p id="inboxReplyTo" class="control-note"></p></form></section>
+        </div>
+      </section>
+      <section class="view" id="connectionsView" aria-labelledby="connectionsTitle">
+        <div class="brief-panel">
+          <p class="step-label">01 / CONNECT</p>
+          <h2 id="connectionsTitle">Connect your workspace</h2>
+          <p>Connect your Switch account once. SwitchFlow remembers this session on this laptop so you can return to your workflows without entering the password each time.</p>
+          <form id="switchLoginForm">
+            <label for="switchEmail">Switch account email</label><input id="switchEmail" type="email" autocomplete="username" required>
+            <label for="switchPassword">Switch password</label><input id="switchPassword" type="password" autocomplete="current-password" required>
+            <button class="button primary" type="submit">Sign in to Switch</button>
+          </form>
+          <p id="connectionFeedback" role="status">Sign in to manage chat connections.</p>
+          <button id="switchLogout" class="button secondary" type="button" hidden>Sign out of SwitchFlow</button>
+          <section class="chat-dashboard" aria-labelledby="aiConnectionsTitle">
+            <div class="chat-dashboard-heading">
+              <div><p class="eyebrow">YOUR AI CONNECTIONS</p><h3 id="aiConnectionsTitle">Choose the AI behind your workflows</h3></div>
+              <button class="button ghost" id="refreshAiConnections" type="button">Refresh AI connections</button>
+            </div>
+            <p>Connect OpenAI, Claude, or Gemini with your API key. You can connect several providers and choose one for each workflow.</p>
+            <p id="aiConnectionCount" role="status">Sign in to see your AI connections.</p>
+            <div id="aiProviderCards" class="chat-platform-grid"></div>
+            <form id="aiConnectionForm" hidden>
+              <h3 id="aiConnectionFormTitle">Connect AI</h3>
+              <input type="hidden" id="aiProviderId">
+              <label for="aiModelId">Model ID</label>
+              <input id="aiModelId" required maxlength="180" placeholder="Enter a model ID available in your API account">
+              <label for="aiApiKey">API key</label>
+              <input id="aiApiKey" type="password" autocomplete="off" required maxlength="4096">
+              <p class="control-note">Use an API key from your provider account. Keys are encrypted on this Windows laptop. Testing sends a short request and may use API credits.</p>
+              <button class="button primary" id="saveAiConnection" type="submit">Test &amp; connect AI</button>
+              <button class="button ghost" id="cancelAiConnection" type="button">Cancel</button>
+            </form>
+            <p id="aiConnectionFeedback" role="status"></p>
+          </section>
+          <section class="chat-dashboard" aria-labelledby="chatDashboardTitle">
+            <div class="chat-dashboard-heading"><div><p class="eyebrow">YOUR MESSAGING APPS</p><h3 id="chatDashboardTitle">Choose where your business works</h3></div><button type="button" class="button ghost" id="refreshChatApps">Refresh status</button></div>
+            <p id="chatConnectionCount" role="status" aria-live="polite">Sign in to see your connected apps.</p>
+            <p class="control-note">Connect multiple apps, then choose one connected account for each workflow. Each app keeps its own chat destination.</p>
+            <div id="chatPlatformGrid" class="chat-platform-grid"></div>
+          </section>
+          <div id="connectionCards"></div>
+          <details id="addChatAppDetails" hidden>
+          <summary>Add another chat app</summary>
+          <form id="chatConnectionForm">
+            <h3>Add a chat app</h3>
+            <label for="connectionPlatform">Platform</label><select id="connectionPlatform"></select>
+            <label for="connectionName">Connection name</label><input id="connectionName" required placeholder="My business team">
+            <div id="connectionFields"></div>
+            <label class="check"><input id="connectionCreateChannels" type="checkbox" checked><span>Allow Switch to create workflow channels</span></label>
+            <button class="button primary" type="submit">Connect app to Switch</button>
+            <p id="chatConnectionFeedback" class="connection-feedback" role="status" aria-live="polite"></p>
+            <p>Use your platform's bot/app credentials. Switch validates and stores the connection. Any required webhook address is shown after setup.</p>
+          </form>
+          </details>
+        </div>
+      </section>
+
+      <section class="view" id="builderView" aria-labelledby="viewTitle">
         <div class="builder-layout">
           <form class="brief-panel" id="workflowForm" autocomplete="off">
             <div class="panel-heading">
-              <span class="step-label">01 / BUSINESS BRIEF</span>
+              <span class="step-label">03 / BUSINESS BRIEF</span>
               <h2>What should SwitchFlow improve?</h2>
               <p>Give the agents enough context to design a useful, controlled workflow.</p>
             </div>
@@ -81,6 +202,7 @@
             <label for="businessType">Business type</label>
             <select id="businessType" name="businessType">
               <option value="restaurant">Restaurant or café</option>
+              <option value="developer">Software development team</option>
               <option value="retail">Small retailer</option>
               <option value="freelancer">Freelancer or agency</option>
               <option value="clinic">Clinic or pharmacy</option>
@@ -92,6 +214,9 @@
 
             <label for="businessGoal">Problem or goal</label>
             <textarea id="businessGoal" name="businessGoal" rows="5" required>Every evening, predict tomorrow's demand, reduce food waste, and prepare an ingredient order for manager approval.</textarea>
+            <label for="requestMode">Who starts this workflow?</label>
+            <select id="requestMode" name="requestMode"><option value="owner">Business owner</option><option value="customer">Customers in the connected chat group</option></select>
+            <p class="control-note">Customer mode listens for an order such as “I want 10 cookies” in the connected chat group. Agents check capacity, you decide in Approvals, and SwitchFlow replies in that customer’s thread.</p>
 
             <label for="successMetricInput">How will success be measured?</label>
             <input id="successMetricInput" name="successMetric" type="text" value="Reduce avoidable waste by 20% without creating stock-outs." required>
@@ -100,11 +225,11 @@
               <div>
                 <label for="trigger">When should it run?</label>
                 <select id="trigger" name="trigger">
-                  <option>Every day at 6:00 PM</option>
-                  <option>When new data arrives</option>
-                  <option>When a customer contacts us</option>
-                  <option>Manually</option>
+                  <option value="Daily">Daily</option>
+                  <option value="Manually">Manually</option>
                 </select>
+                <label for="scheduleTime">Daily time</label>
+                <input id="scheduleTime" name="scheduleTime" type="time" value="18:00">
               </div>
               <div>
                 <label for="approval">Control level</label>
@@ -117,14 +242,53 @@
               </div>
             </div>
 
+            <fieldset id="channelOptions">
+              <legend>Where should this team work?</legend>
+              <p class="control-note">Choose one of your chat apps already connected to Switch. SwitchFlow remembers the room ID you use for each app.</p>
+              <label for="workflowConnection">Connected chat app</label>
+              <select id="workflowConnection" name="connectionId" required><option value="">Sign in to load your connected apps</option></select>
+              <label for="externalChannelId" id="externalChannelLabel">Existing chat or channel ID</label>
+              <input id="externalChannelId" name="externalChannelId" autocomplete="off" placeholder="Choose a chat app first">
+              <p id="chatDestinationHint" class="control-note" role="status">Telegram needs the ID of a group that already contains your bot. Other apps can create a channel when allowed.</p>
+            </fieldset>
             <fieldset>
-              <legend>Available data</legend>
-              <label class="check"><input type="checkbox" name="data" value="Sales history" checked><span>Sales history</span></label>
-              <label class="check"><input type="checkbox" name="data" value="Inventory levels" checked><span>Inventory</span></label>
-              <label class="check"><input type="checkbox" name="data" value="Bookings"><span>Bookings</span></label>
-              <label class="check"><input type="checkbox" name="data" value="Documents"><span>Documents</span></label>
+              <legend>AI for this workflow</legend>
+              <label for="workflowAiConnection">Connected AI and model</label>
+              <select id="workflowAiConnection" name="aiConnectionId">
+                <option value="">Local Codex setup</option>
+              </select>
+              <p class="control-note">This AI prepares the plan and powers the workflow team. Connect more providers beside Switch sign-in above.</p>
             </fieldset>
 
+            <fieldset>
+              <legend>Business files</legend>
+              <p class="control-note">Upload a schedule, sales, inventory, or other CSV, JSON, or TXT file in Data & schedules. Select up to five files for this workflow.</p>
+              <div id="businessFiles">Sign in and upload a file to use real business data.</div>
+            </fieldset>
+
+            <fieldset id="switchAgentPicker">
+              <legend>04 / Optional: reuse existing agents</legend>
+              <p class="control-note">You can invite agents already in your Switch workspace to the room. Leave this empty to let SwitchFlow create the new workflow team from your business brief.</p>
+              <div class="agent-picker-toolbar">
+                <strong id="switchAgentCount">0 selected</strong>
+                <button class="button ghost" id="refreshSwitchAgents" type="button">Refresh agents</button>
+              </div>
+              <p id="switchAgentStatus" class="control-note" role="status">Sign in to load agents from Switch.</p>
+              <div id="switchAgentChoices" class="switch-agent-choices"></div>
+              <details id="switchAgentCreate">
+                <summary>Add an agent from a provider</summary>
+                <p id="switchProviderStatus" class="control-note"></p>
+                <div id="switchProviderFields" hidden>
+                  <label for="switchAgentProvider">AI provider</label><select id="switchAgentProvider"></select>
+                  <div id="switchAgentHostFields" hidden>
+                    <label for="switchAgentHost">Switch host</label><select id="switchAgentHost"></select>
+                    <label for="switchAgentName">Agent name</label><input id="switchAgentName" maxlength="64" placeholder="inventory-advisor">
+                    <label for="switchAgentDescription">What should this agent do?</label><textarea id="switchAgentDescription" maxlength="400" rows="2"></textarea>
+                    <button class="button secondary" type="button" id="createSwitchAgent">Create and select agent</button>
+                  </div>
+                </div>
+              </details>
+            </fieldset>
             <button class="button primary wide" type="submit">
               Generate my workflow <span aria-hidden="true">→</span>
             </button>
@@ -134,8 +298,9 @@
             <div class="stage-empty" id="emptyState">
               <div class="empty-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
               <p class="eyebrow">WORKFLOW ARCHITECT</p>
-              <h2>Your agent team will appear here.</h2>
-              <p>Describe one real business problem. SwitchFlow will map the agents, handoffs, approval gate, and measurable outcome.</p>
+              <h2 id="workflowStatusTitle">Preparing your agent workflow</h2>
+              <p id="workflowStatusCopy">SwitchFlow will map the agents, handoffs, approval gate, and measurable outcome from your setup.</p>
+              <button class="button primary" id="retryWorkflowButton" type="button" hidden>Try again</button>
             </div>
 
             <div class="generated-flow" id="generatedFlow" hidden>
@@ -148,11 +313,12 @@
               </div>
 
               <div class="live-rail" id="liveRail" aria-label="Generated workflow steps"></div>
+              <div class="workflow-integrations" id="workflowIntegrations" aria-live="polite"></div>
 
               <div class="flow-footer">
                 <div>
                   <span>Trigger</span>
-                  <strong id="triggerSummary">Every day at 6:00 PM</strong>
+                  <strong id="triggerSummary">Daily at 6:00 PM</strong>
                 </div>
                 <div>
                   <span>Success measure</span>
@@ -160,21 +326,48 @@
                 </div>
                 <div class="flow-actions">
                   <a class="button secondary" href="./switchflow.template.yaml" download>Export to Switch</a>
-                  <button class="button primary" id="activateButton" type="button">Run demo</button>
+                  <button class="button primary" id="activateButton" type="button">Run in Switch</button>
                 </div>
               </div>
               <div class="switch-proof">
                 <span class="status-dot"></span>
-                <div><strong>Switch is the system of record</strong><small>Agent handoffs, human decisions, execution evidence, and verification stay together in one shared room.</small></div>
+                <div>
+                  <strong id="switchConnectionLabel">Connecting to Switch…</strong>
+                  <small>Agent handoffs, human decisions, execution evidence, and verification stay together in one shared room.</small>
+                  <small class="switch-channel-label">Connect the same workflow to the chat tools your team already uses:</small>
+                  <div class="switch-channels" aria-label="Switch messaging integrations">
+                    <span>Mattermost</span><span>Slack</span><span>Microsoft Teams</span><span>Discord</span><span>Telegram</span>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
         </div>
       </section>
 
+      <section class="view" id="dataView" aria-labelledby="dataTitle">
+        <div class="room-header"><div><p class="eyebrow">02 / BUSINESS DATA</p><h2 id="dataTitle">Data & schedules</h2></div></div>
+        <div class="data-panels">
+          <section class="brief-panel business-files-panel"><h3>Your business files</h3><p class="business-files-intro">Keep the data your workflows use in one place. Upload a file or send one through a connected chat room.</p>
+            <form id="businessUploadForm" class="business-upload-form">
+              <input id="businessUpload" class="business-upload-input" type="file" accept=".csv,.json,.txt" required>
+              <label class="business-upload-picker" for="businessUpload"><span class="business-upload-icon" aria-hidden="true">↑</span><span><strong id="businessUploadName">Choose a file</strong><small>CSV, JSON or TXT · up to 1 MB</small></span></label>
+              <button class="button primary" type="submit">Upload file</button>
+            </form>
+            <p id="businessDataFeedback" class="business-data-feedback" role="status" aria-live="polite"></p>
+            <div class="business-file-heading"><strong>Workspace files</strong><span id="businessFileCount">0 files</span></div>
+            <div id="businessFileList" class="business-file-list"></div>
+            <p class="business-files-note">Select files in the business brief before agents use them. CSV tables can be edited here.</p>
+          </section>
+          <section class="brief-panel"><h3 id="selectedFileTitle">Open a file</h3><p id="selectedFileMeta">Select an uploaded file to view or edit it here.</p><div id="businessFilePreview" class="data-table-wrap"></div><a id="businessFileDownload" class="button secondary" hidden>Download current file</a></section>
+        </div>
+        <section class="brief-panel schedule-panel"><h3>Workflow schedules</h3><p>Daily workflows run while SwitchFlow and Switch are open. Each run still requests a fresh human approval.</p><div id="workflowScheduleList">Sign in to see your agent teams.</div></section>
+      </section>
+
       <section class="view" id="roomView" aria-labelledby="roomTitle">
         <div class="room-header">
           <div>
+            <button class="room-back" id="roomBack" type="button">← Back to connections</button>
             <p class="eyebrow">SHARED SWITCH ROOM</p>
             <h2 id="roomTitle">Agent collaboration</h2>
           </div>
@@ -215,6 +408,7 @@
         <div class="approval-list" id="approvalList">
           <div class="room-empty"><strong>No decisions waiting.</strong><p>Proposed actions appear here before execution.</p></div>
         </div>
+        <div class="approval-list" id="activeWorkflowList" aria-live="polite"></div>
       </section>
 
       <section class="view" id="libraryView" aria-labelledby="libraryTitle">
@@ -238,11 +432,34 @@
           </table>
         </div>
       </section>
+
+      <section class="view" id="helpView" aria-labelledby="helpTitle">
+        <article class="help-panel">
+          <p class="eyebrow">HELP</p>
+          <h2 id="helpTitle">How customer requests reach your business</h2>
+          <ol class="help-steps">
+            <li><strong>Customer</strong> mentions your intake agent in the connected group and describes the request.</li>
+            <li><strong>Intake agent</strong> acknowledges receipt and assigns a request reference.</li>
+            <li><strong>Specialist agents</strong> check your selected capacity file and explain missing information.</li>
+            <li><strong>You</strong> review the evidence in Approvals and accept or decline.</li>
+            <li><strong>SwitchFlow</strong> reserves capacity after acceptance and posts the decision in the original customer thread.</li>
+            <li><strong>Shared record</strong> keeps the request, analysis, decision, and reply together for review.</li>
+          </ol>
+          <p class="help-note">Add a CSV with <code>item,capacity,committed</code> in Data &amp; schedules before creating a capacity-based workflow.</p>
+        </article>
+      </section>
     </main>
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="light-reveal" id="lightReveal" aria-hidden="true"></div>
 
-  <script src="./app.js?v=4"></script>
+  <script src="./app.js?v=16"></script>
+  <script src="./chat-platforms.js?v=1"></script>
+  <script src="./agent-picker.js?v=3"></script>
+  <script src="./ai-connections.js?v=1"></script>
+  <script src="./connections.js?v=7"></script>
+  <script src="./inbox.js?v=1"></script>
+  <script src="./business-data.js?v=2"></script>
 </body>
 </html>

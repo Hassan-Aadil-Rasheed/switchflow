@@ -1,0 +1,12 @@
+Fictional production incident for a SwitchFlow demo
+Issue: Checkout requests intermittently return HTTP 500 after release 2.14.0.
+Impact: 7 of 40 checkout attempts failed in a 15-minute sample. Payment status is unknown.
+Timeline (all times UTC):
+09:40 release 2.14.0 deployed
+09:42 first checkout failure reported
+09:44 POST /checkout request_id=req-101 status=500 error="cart total mismatch" cart_id=cart-17
+09:47 POST /checkout request_id=req-118 status=200 cart_id=cart-18
+09:51 POST /checkout request_id=req-129 status=500 error="cart total mismatch" cart_id=cart-22
+Known: failures correlate with the new release. Root cause is not yet proven.
+Missing: code diff, payment provider events, full request traces, and rollback outcome.
+Expected team result: severity, reproducible test plan, evidence-backed hypotheses, owner-approved next action, and verification checklist.
