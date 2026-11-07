@@ -1,4 +1,4 @@
-# SwitchFlow Desktop 0.3.11
+# SwitchFlow Desktop 0.3.36
 
 Describe a business goal, review the AI-designed specialist team, then confirm
 **Create agents & run**. Agents are registered under the signed-in Switch user
@@ -13,7 +13,7 @@ Docker is required for local Mattermost chat but not for the native Switch serve
 ## Build and run
 
 Run `npm install`, `npm run desktop:check`, then `npm run desktop:build` from
-the project root. Output: `desktop-release/SwitchFlow Setup 0.3.11.exe`.
+the project root. Output: `desktop-release/SwitchFlow Setup 0.3.36.exe`.
 Use `npm run desktop` for development.
 
 The installed app starts its own backend when nothing is listening on port
